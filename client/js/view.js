@@ -29,13 +29,12 @@ var enableDragAndDrop = function() {
       var $square = $(this);
       var $piece = ui.draggable;
       var squareIndex = $square.index();
+      var pieceIndex = $piece.parent().index();
       //
       makeEnPassantCapture(squareIndex);
-      updateJustMovesPawn($piece.parent().index(), squareIndex);
+      updateJustMovesPawn(pieceIndex, squareIndex);
       //
-      clear($square);
-      move($piece, $square);
-      align($piece, $square);
+      move($piece, $square, pieceIndex, squareIndex);
       //
       castle(squareIndex);
       promotePlayer($piece);
@@ -61,24 +60,14 @@ var disableDraggable = function($draggablePiece) {
   $draggablePiece.removeClass('drag-enabled');
 };
 
-var clear = function($square) {
+var move = function($piece, $square, pieceIndex, squareIndex) {
   $square.children('.draggable-piece').first().detach();
-  chessboard[$square.index()] = undefined;
-};
-
-var move = function($piece, $square) {
-  var pieceIndex = $piece.parent().index();
-  var squareIndex = $square.index();
-  //
   $piece.detach().appendTo($square);
+  $piece.offset({ top: $square.position().top, left: $square.position().left });
   //
   chessboard[squareIndex] = chessboard[pieceIndex];
-  chessboard[pieceIndex] = undefined;
   chessboard[squareIndex].initial = false;
-};
-
-var align = function($piece, $square) {
-  $piece.offset({ top: $square.position().top, left: $square.position().left });
+  chessboard[pieceIndex] = undefined;
 };
 
 var endGame = function(message) {

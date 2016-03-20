@@ -94,7 +94,7 @@ var switchPlayer = function() {
 
 var getSquare = function(index) {
   return $('#chessboard').children('.droppable-square').eq(index);
-}
+};
 
 var getPiece = function(squareIndex) {
   return $('#chessboard').children('.droppable-square').eq(squareIndex).children('.draggable-piece').first();

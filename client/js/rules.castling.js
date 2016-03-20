@@ -17,9 +17,9 @@ var addCastlingMove = function(kingPosition, moves, filter) {
   }
   //
   find(ally, 'rook', true).forEach(function(rook, index, array) {
-    var rookPosinion = new Coordinates(rook);
-    var start = kingPosition.row * 8 + Math.min(rookPosinion.column, kingPosition.column) + 1;
-    var end = kingPosition.row * 8 + Math.max(rookPosinion.column, kingPosition.column);
+    var rookPosition = new Coordinates(rook);
+    var start = kingPosition.row * 8 + Math.min(rookPosition.column, kingPosition.column) + 1;
+    var end = kingPosition.row * 8 + Math.max(rookPosition.column, kingPosition.column);
     //
     for (var i = start; i < end; i++) {
       if (chessboard[i]) {
@@ -27,7 +27,7 @@ var addCastlingMove = function(kingPosition, moves, filter) {
       }
     }
     //
-    var direction = Math.sign(rookPosinion.column - kingPosition.column);
+    var direction = Math.sign(rookPosition.column - kingPosition.column);
     //
     if (moves.indexOf(kingPosition.index + direction) == -1) {
       return;
@@ -36,7 +36,7 @@ var addCastlingMove = function(kingPosition, moves, filter) {
     var kingMove = kingPosition.index + 2 * direction;
     var rookMove = kingMove - direction;
     //
-    if (checkCastlingMove) {
+    if (checkCastlingMove(kingPosition.index, kingMove, rook, rookMove)) {
       moves.push(kingMove);
       castling_kingMoves.push(kingMove);
       castling_rooks.push(rook);
@@ -68,7 +68,8 @@ var castle = function(to) {
   //
   var index = castling_kingMoves.indexOf(to);
   if (index != -1) {
-    move(getPiece(castling_rooks[index]), $('#chessboard').children('.droppable-square').eq(castling_rookMoves[index]));
+    move(getPiece(castling_rooks[index]), $('#chessboard').children('.droppable-square').eq(castling_rookMoves[index]),
+      castling_rooks[index], castling_rookMoves[index]);
   }
   //
   castling_kingMoves = [];

@@ -1,15 +1,14 @@
 var isCheck = function() {
-  var check = false;
   var king = find(ally, 'king').shift();
+  var enemies = find(enemy);
   //
-  find(enemy).forEach(function(item, index, enemies) {
-    if (getEnemyMoves(item).indexOf(king) != -1) {
-      check = true;
-      return false;
+  for (var i = 0; i < enemies.length; i++) {
+    if (getEnemyMoves(enemies[i]).indexOf(king) != -1) {
+      return true;
     }
-  });
+  }
   //
-  return check;
+  return false;
 };
 
 var isMate = function() {
