@@ -2,9 +2,8 @@ var onContinue = function() {
   clearCache();
   switchPlayer();
   //
-  isCheckmate() && endGame('☠' + chessboard[find(ally, 'king')].view + '☠');
-  isStalemate() && endGame(chessboard[find(ally, 'king')].view + '🙏' + chessboard[find(enemy, 'king')].view);
-}
+  gameEventArgs.emit();
+};
 
 var promotePlayer = function($piece) {
   if ($piece.hasClass('pawn') && Math.floor($piece.parent().index() / 8) == 0) {
@@ -18,7 +17,7 @@ var promotePlayer = function($piece) {
 var promoteOpponent = function(index, view) {
   var piece = chessboard[index];
   var row = Math.floor(index / 8);
-  if (piece != undefined && piece.type == 'pawn' && row == (length - 1) && getOptions(piece.colour).indexOf(view) != -1) {
+  if (piece != undefined && piece.type == 'pawn' && row == (length - 1) && getPromotionOptions(piece.colour).indexOf(view) != -1) {
     promotePawn(index, view);
     return true;
   }
@@ -35,6 +34,10 @@ var initPromotionPopup = function($piece) {
     $('#popup-inner').empty();
     //
     promotePawn($piece.parent().index(), $(this).html());
+    //
+    gameEventArgs.event = 'turn_promotion';
+    gameEventArgs.promotion = $(this).html();
+    //
     onContinue();
   });
   //

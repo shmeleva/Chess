@@ -1,0 +1,12 @@
+{
+  "name": "chess-server",
+  "version": "1.0.0",
+  "description": "Chess Server",
+  "main": "server.js",
+  "author": "Rina Shmeleva",
+  "url" : "https://github.com/shmeleva",
+  "license": "ISC",
+  "dependencies": {
+    "socket.io": "^1.4.5"
+  }
+}

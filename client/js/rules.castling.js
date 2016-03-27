@@ -70,6 +70,9 @@ var castle = function(to) {
   if (index != -1) {
     move(getPiece(castling_rooks[index]), $('#chessboard').children('.droppable-square').eq(castling_rookMoves[index]),
       castling_rooks[index], castling_rookMoves[index]);
+    //
+    gameEventArgs.event = 'turn_castling';
+    gameEventArgs.from = castling_rooks[index];
   }
   //
   castling_kingMoves = [];

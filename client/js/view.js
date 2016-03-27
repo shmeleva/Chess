@@ -4,11 +4,11 @@ var enableDragAndDrop = function() {
     disabled: true,
 
     start: function(event, ui) {
-      cached_Flag || cacheMoves();
-      //
       $('#chessboard').children('.droppable-square').each(function() {
         disableDroppable($(this));
       });
+      //
+      cached_Flag || cacheMoves();
       //
       chessboard[$(this).parent().index()].moves.forEach(function(move, index, array) {
         enableDroppable(getSquare(move));
@@ -31,10 +31,15 @@ var enableDragAndDrop = function() {
       var squareIndex = $square.index();
       var pieceIndex = $piece.parent().index();
       //
+      gameEventArgs.reset();
+      //
       makeEnPassantCapture(squareIndex);
       updateJustMovesPawn(pieceIndex, squareIndex);
       //
       move($piece, $square, pieceIndex, squareIndex);
+      //
+      gameEventArgs.from = pieceIndex;
+      gameEventArgs.to = squareIndex;
       //
       castle(squareIndex);
       promotePlayer($piece);
@@ -70,8 +75,10 @@ var move = function($piece, $square, pieceIndex, squareIndex) {
   chessboard[pieceIndex] = undefined;
 };
 
-var endGame = function(message) {
-	$('#popup-inner').append('<div class="popup-button">' + message + '</div>');
+var initGameEndPopup = function(buttons) {
+  buttons.forEach(function(item, index, array) {
+    $('#popup-inner').append('<div class="popup-button">' + item + '</div>');
+  });
 	//
 	$('.popup-button').click(function() {
 		location.reload(true);

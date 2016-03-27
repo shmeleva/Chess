@@ -5,6 +5,7 @@ function Coordinates(index) {
 };
 
 var chessboard = [];
+var reversedBoard = false;
 
 var playerMove_Flag = true;
 
@@ -29,6 +30,10 @@ var enemy = black;
 var player = white;
 
 var initializeChessboard = function(reversed) {
+  if (reversed) {
+    reverseBoard();
+  }
+  //
 	for (var i = 0; i < ranks.length; i++) {
 		for (var j = 0; j < files.length; j++) {
 			var count = files.length * i + j;
@@ -75,6 +80,7 @@ var reverseBoard = function() {
 	files.reverse();
 	ranks.reverse();
 	unicodeBoard.reverse();
+  reversedBoard = !reversedBoard;
 	toggleColors();
 	player = black;
 };
@@ -87,9 +93,14 @@ var toggleColors = function() {
 
 var switchPlayer = function() {
 	disablePlayer();
+  clearCache();
 	toggleColors();
+  //
 	playerMove_Flag = !playerMove_Flag;
-	enablePlayer();
+  if (playerMove_Flag) {
+    cacheMoves();
+    endGame() || enablePlayer();
+  }
 };
 
 var getSquare = function(index) {

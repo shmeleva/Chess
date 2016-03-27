@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	initializeChessboard(false);
-	enableDragAndDrop();
-	enablePlayer();
+	initSocket();
+	bindSocketEvents();
+	startNewGame();
 });
