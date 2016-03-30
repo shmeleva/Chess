@@ -1,6 +1,7 @@
 var io = require('socket.io').listen(3056);
 
 var queue = [];
+var rooms = [];
 var gameCounter = 1;
 
 var clientTurnEvents = ['turn_move', 'turn_promotion', 'turn_castling', 'turn_mate', 'turn_draw'];
@@ -8,6 +9,8 @@ var serverTurnEvents = ['player_move', 'player_promotion', 'player_castling', 'p
 
 var clientGameEndEvents = ['turnValidation_invalid', 'turnValidation_mate', 'turnValidation_draw', 'room_leave', 'disconnect'];
 var serverGameEndMessages = ['invalid turn', 'mate', 'draw', 'leave', 'leave'];
+
+var clientDisconnectEvents = ['room_leave', 'disconnect'];
 
 console.log('Server is running...');
 
@@ -21,11 +24,11 @@ Array.observe(queue, function(changes) {
 
   if (queue.length >= 2) {
     var roomId = 'roomN' + gameCounter++;
-    var whiteColour = Math.floor(Math.random());
+    var whiteIndex = Math.floor(Math.random());
 
     // Размещение игроков в комнате и подписка на события.
     queue.splice(0,2).forEach(function(player, index) {
-      var playerColour = (index == whiteColour) ? 'white' : 'black';
+      var playerColour = (index == whiteIndex) ? 'white' : 'black';
       //
       player.join(roomId);
       player.emit('game_found', {
@@ -35,18 +38,22 @@ Array.observe(queue, function(changes) {
 
       clientTurnEvents.forEach(function(clientEvent, eventIndex) {
         player.on(clientEvent, function(eventArgs) {
+          rooms[roomId] = (clientEvent == 'turn_mate');
           eventArgs = eventArgs || {};
           eventArgs.playerColor = playerColour;
           io.sockets.in(roomId).emit(serverTurnEvents[eventIndex], eventArgs);
         });
       });
 
-      // TODO: Create a flag or something to make sure that
-      // both of the players agree on checkmate.
       clientGameEndEvents.forEach(function(clientEvent, eventIndex) {
         player.on(clientEvent, function(eventArgs) {
           var message = serverGameEndMessages[eventIndex];
           var winner = (message == 'mate') ? playerColour : null;
+
+          if (winner && !rooms[roomId]) {
+            message = 'invalid turn';
+            winnerColor = null;
+          }
 
           io.sockets.in(roomId).emit('game_end', {
             msg: message,
@@ -54,8 +61,12 @@ Array.observe(queue, function(changes) {
           });
 
           //TODO: Fix disconnect.
-          //io.sockets.in(roomId).removeAllListeners('room_leave');
-          io.sockets.in(roomId).leave(roomId);
+          io.sockets.in(roomId).removeAllListeners('game_end');
+          Object.keys(io.sockets.in(roomId).sockets).forEach(function (socketId) { io.sockets.connected[socketId].leave[roomId]; });
+
+          //io.sockets.clients(roomId).forEach(function(s) {
+          //  s.leave(roomId);
+          //});
         });
       });
     });
@@ -74,6 +85,7 @@ io.sockets.on('connection', function(socket) {
     ['game_stopFinding', 'disconnect'].forEach(function(event) {
       socket.on(event, function() {
         // TODO
+        //queue.splice(queue.indexOf(socket), 1);
       });
     });
   });

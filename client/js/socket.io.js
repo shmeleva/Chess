@@ -218,6 +218,12 @@ var onPlayerStalemate = function() {
   }
 };
 
+var gameOver = false;
 var onEndOfGame = function(data) {
+  if (gameOver) {
+    return;
+  }
+  //
+  gameOver = true;
   initGameEndPopup(convertMessage(data.winnerColor, data.msg));
 };

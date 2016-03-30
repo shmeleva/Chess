@@ -76,11 +76,14 @@ var move = function($piece, $square, pieceIndex, squareIndex) {
 };
 
 var initGameEndPopup = function(buttons) {
+  //$('#popup-inner').fadeOut();
+  $('#popup-inner').empty();
+  //
   buttons.forEach(function(item, index, array) {
-    $('#popup-inner').append('<div class="popup-button">' + item + '</div>');
+    $('#popup-inner').append('<div class="game-end-popup-button">' + item + '</div>');
   });
 	//
-	$('.popup-button').click(function() {
+	$('.game-end-popup-button').click(function() {
 		location.reload(true);
 	});
 	//

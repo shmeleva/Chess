@@ -26,10 +26,10 @@ var promoteOpponent = function(index, view) {
 
 var initPromotionPopup = function($piece) {
   getPromotionOptions(ally).forEach(function(promotion, index, array) {
-    $('#popup-inner').append('<div class="popup-button">' + promotion + '</div>');
+    $('#popup-inner').append('<div class="promotion-popup-button">' + promotion + '</div>');
   });
   //
-  $('.popup-button').click(function() {
+  $('.promotion-popup-button').click(function() {
     $('#popup').fadeOut();
     $('#popup-inner').empty();
     //

@@ -38,12 +38,12 @@ var convertFromString = function(colour, piece) {
 var convertMessage = function(winner, message) {
   switch (message) {
     case 'mate':
-      return ['☠' + ((winner == 'white') ? '♚' : '♔') + '☠'];
+      return ['☠ ' + ((winner == 'white') ? '♚' : '♔') + ' ☠'];
     case 'draw':
-      return ['♔' + '🙏' + '♚'];
+      return ['♔ ' + '🙏' + ' ♚'];
     case 'invalid turn':
-      return ['?' + '?' + '?'];
+      return ['🙅 🙅 🙅'];
     case 'leave':
-      return ['🚪'];
+      return [(reversedBoard ? '♔' : '♚') + '⎆  🚪'];
   }
 };
