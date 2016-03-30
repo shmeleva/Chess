@@ -1,5 +1,10 @@
 /*$square-size: 64px;*/
 
+@font-face {
+    font-family: 'segoeUiSymbol';
+    src: url('segoe-ui-symbol.ttf');
+}
+
 #chessboard
 {
 	width: 512px;
@@ -47,6 +52,7 @@
 	float: left;
 	color: Teal;
 	font-size: 48px;
+	font-family: 'segoeUiSymbol';
 	text-align: center;
 	cursor: default;
 	z-index: 3;
@@ -55,12 +61,6 @@
 	-webkit-user-select: none;   /* Chrome, Safari, Opera */
 	-moz-user-select: none;      /* Firefox */
 	-ms-user-select: none;       /* IE, Edge */
-
-	/*-webkit-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
-	-moz-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
-	-ms-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
-	-o-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
-	transition: top 0.35s ease-in-out, left 0.35s ease-in-out;*/
 }
 
 .draggable-piece.drag-enabled
@@ -136,6 +136,7 @@
 	color: Teal;
 	float: left;
 	font-size: 48px;
+	font-family: 'segoeUiSymbol'
 	text-align: center;
 	cursor: pointer;
 
@@ -152,6 +153,7 @@
 	color: Teal;
 	float: none;
 	font-size: 48px;
+	font-family: 'segoeUiSymbol'
 	text-align: center;
 	cursor: pointer;
 
@@ -164,13 +166,4 @@
 #chessboard-wrapper {
 	width: 512px;
 	height: 512px;
-}
-
-.smoothmove
-{
-	-webkit-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
-	-moz-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
-	-ms-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
-	-o-transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
-	transition: top 0.35s ease-in-out, left 0.35s ease-in-out;
 }
