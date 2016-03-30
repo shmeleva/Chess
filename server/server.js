@@ -60,13 +60,10 @@ Array.observe(queue, function(changes) {
             winnerColor: winner
           });
 
-          //TODO: Fix disconnect.
-          io.sockets.in(roomId).removeAllListeners('game_end');
-          Object.keys(io.sockets.in(roomId).sockets).forEach(function (socketId) { io.sockets.connected[socketId].leave[roomId]; });
+          Object.keys(io.sockets.in(roomId).sockets).forEach(function (socketId) {
+            io.sockets.connected[socketId].leave[roomId];
+          });
 
-          //io.sockets.clients(roomId).forEach(function(s) {
-          //  s.leave(roomId);
-          //});
         });
       });
     });
@@ -74,18 +71,22 @@ Array.observe(queue, function(changes) {
     console.log(queue.length + ' user(s) waiting...');
   }
 });
-//
+
 io.sockets.on('connection', function(socket) {
   console.log(socket.id + ' connected...');
 
   socket.on('game_find', function() {
     queue.push(socket);
-    //socket.removeAllListeners('game_find');
-    //
+    socket.removeAllListeners('game_find');
+
     ['game_stopFinding', 'disconnect'].forEach(function(event) {
       socket.on(event, function() {
-        // TODO
-        //queue.splice(queue.indexOf(socket), 1);
+        var queueIndex = queue.indexOf(socket);
+        if (queueIndex != -1) {
+          console.log('Socket' + socket + ' #' + queueIndex + ' disconnected...');
+          queue.splice(queue.indexOf(socket), 1);
+          console.log(queue.length + ' user(s) waiting...');
+        }
       });
     });
   });
