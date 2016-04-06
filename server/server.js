@@ -2,15 +2,12 @@ var io = require('socket.io').listen(3056);
 
 var queue = [];
 var rooms = [];
-var gameCounter = 1;
 
 var clientTurnEvents = ['turn_move', 'turn_promotion', 'turn_castling', 'turn_mate', 'turn_draw'];
 var serverTurnEvents = ['player_move', 'player_promotion', 'player_castling', 'player_mate', 'player_draw'];
 
 var clientGameEndEvents = ['turnValidation_invalid', 'turnValidation_mate', 'turnValidation_draw', 'room_leave', 'disconnect'];
 var serverGameEndMessages = ['invalid turn', 'mate', 'draw', 'leave', 'leave'];
-
-var clientDisconnectEvents = ['room_leave', 'disconnect'];
 
 console.log('Server is running...');
 
@@ -23,7 +20,7 @@ Array.observe(queue, function(changes) {
   console.log(queue.length + ' user(s) waiting...');
 
   if (queue.length >= 2) {
-    var roomId = 'roomN' + gameCounter++;
+    var roomId = guid();
     var whiteIndex = Math.floor(Math.random());
 
     // Размещение игроков в комнате и подписка на события.
@@ -120,3 +117,10 @@ function getRoomsList() {
   return Object.keys(io.sockets.adapter.rooms).filter( (roomId) => /^game.+/.test(roomId) );
 }
 */
+
+var guid = function() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
+};
