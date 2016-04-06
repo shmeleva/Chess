@@ -112,12 +112,6 @@ io.sockets.on('connection', function(socket) {
   */
 });
 
-/*
-function getRoomsList() {
-  return Object.keys(io.sockets.adapter.rooms).filter( (roomId) => /^game.+/.test(roomId) );
-}
-*/
-
 var guid = function() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         var r = Math.random()*16|0, v = c === 'x' ? r : (r&0x3|0x8);
